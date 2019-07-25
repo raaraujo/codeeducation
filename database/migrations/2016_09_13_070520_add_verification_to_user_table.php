@@ -17,7 +17,7 @@ class AddVerificationToUserTable extends Migration
      */
     public function getUserTableName()
     {
-        $user_model = config('auth.providers.users.model', App\Entities\User::class);
+        $user_model = config('auth.providers.users.model', CodeFlix\Models\User::class);
 
         return (new $user_model)->getTable();
     }
