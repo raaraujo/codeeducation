@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace CodeFlix\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,9 +23,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register(RepositoryServiceProvider::class);
-        if($this->app->environment() !== 'production'){
+        if ($this->app->environment() !== 'production') {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+
+        $this->app->bind(
+            'bootstrapper::form',
+            function ($app) {
+                $form = new Form(
+                    $app->make('collective::html'),
+                    $app->make('url'),
+                    $app->make('view'),
+                    $app['session.store']->token()
+                );
+
+                return $form->setSessionStore($app['session.store']);
+            },
+            true
+        );
     }
 }
